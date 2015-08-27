@@ -23,12 +23,17 @@ namespace Extentions
   static class LINQExtenstions
   {
     //ForEach
-    public static void ForEach(this IEnumerable<Task> source, Action<Task> act)
+    public static void ForEach<T>(this IEnumerable<T> source, Action<T> act)
     {
       foreach (var item in source)
       {
         act(item);
       }
+    }
+    public static IEnumerable<T> Convert<T>(this IEnumerable<T> source, Func<object, T> converter)
+    {
+      foreach (var item in source)
+        yield return converter(item);
     }
     //Add Index to Collection
     public static IEnumerable<IndexedItem<T>> Indexed<T>(this IEnumerable<T> source)

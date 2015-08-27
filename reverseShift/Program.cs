@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LinqToExcel;
 using System.Text;
 using System.Threading.Tasks;
 using Extentions;
@@ -14,14 +17,29 @@ namespace reverseShift
       var members = new List<People>();
       var positions = new List<Position>();
 
-      //EXCELL読み込み
+      //本番用
+      //string fileName = System.Environment.CurrentDirectory + "\\test\\test_shift.xlsx";
+      //var excel = new ExcelQueryFactory(fileName);
+      //for Debug
+      var excel = new ExcelQueryFactory(@"D:\\Documents\\Projects\\4_private\\rikoten\\reverseShift\\reverseShift\\test\\test_shift.xlsx");
 
-      //一行目から順に読み込み。
-      var times = new List<string>();
-      //時間をみつけたら、空セルまでセルの中身を書き込み
+      excel.ReadOnly = true;
+      var worksheet = excel.Worksheet("Sheet1");
 
-      //一行読んでは、新しい人、役職を生成していく
-      //既存のものには追加していく
+      //member追加
+      worksheet.ForEach(row =>
+      {
+        var tasks = row.ConvertAll(cell => cell.Value.ToString());
+        members.Add(new People(tasks[0], tasks.Skip(1).ToList()));
+      });
+      members.ForEach(member =>
+      {
+        Console.Write("Name:{0} Pos:",member.Name);
+        member.getPosList().ForEach(pos => Console.Write(" {0} ", pos));
+        Console.WriteLine("");
+      });
+      
+      Console.ReadLine();
     }
   }
 }
