@@ -1,3 +1,8 @@
+# Customize
+## ignore test file
+test/
+
+
 # Created by https://www.gitignore.io
 
 ### VisualStudio ###
