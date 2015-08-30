@@ -12,6 +12,10 @@ namespace reverseShift
     public string Name { get; private set; }
     public List<List<string>> _positions = new List<List<string>>();
 
+    public Position(string name)
+    {
+      Name = name;
+    }
     public Position(string name, List<string> times)
     {
       Name = name;

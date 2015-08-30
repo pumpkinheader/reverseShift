@@ -38,7 +38,41 @@ namespace reverseShift
         member.getPosList().ForEach(pos => Console.Write(" {0} ", pos));
         Console.WriteLine("");
       });
-      
+
+      //job生成
+      members
+        .SelectMany(p => p.getPosList())
+        .Distinct()
+        .ForEach(name =>
+        {
+          if(name!="")
+            positions.Add(new Position(name));
+        });
+      positions.ForEach(p => Console.WriteLine(p.Name));
+      positions.ForEach(p =>
+      {
+        members.ForEach(m =>
+        {
+          var list = new List<string>();
+          var listFromJob = 
+            m.getPosList()
+            .Indexed()
+            .Where(l => l.Element==p.Name)
+            .Select(s => new IndexedItem<string>(m.Name, s.Index));
+          Console.WriteLine(listFromJob.Count());
+          if(!listFromJob.IsEmpty())
+            p._positions.Add(list.Renew(listFromJob).ToList());
+        });
+      });
+      positions.ForEach(p =>
+      {
+        Console.WriteLine(p.Name);
+        p._positions.ForEach(ms =>
+        {
+          ms.ForEach(m=>Console.Write(m+":"));
+        });
+        Console.Write("END\n");
+      });
       Console.ReadLine();
     }
   }

@@ -30,6 +30,25 @@ namespace Extentions
         act(item);
       }
     }
+    public static bool IsEmpty<T>(this IEnumerable<T> source)
+    {
+      return source.Count() == 0;
+    }
+    public static IEnumerable<T> Renew<T>(this IEnumerable<T> oldSource, IEnumerable<IndexedItem<T>> newSource)
+    {
+      var indexes = newSource.Select(n => n.Index).ToList();
+      var elements = newSource.Select(n => n.Element);
+      var maxIndex = indexes.Max();
+      foreach (var count in Enumerable.Range(0,maxIndex))
+      {
+        if (indexes.Contains(count))
+        {
+          yield return elements.ElementAt(indexes.FindIndex(i => i==count));
+        }
+        else
+          yield return default(T);
+      }
+    }
     public static IEnumerable<T> Convert<T>(this IEnumerable<T> source, Func<object, T> converter)
     {
       foreach (var item in source)
