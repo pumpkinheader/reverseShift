@@ -39,7 +39,7 @@ namespace Extentions
       var indexes = newSource.Select(n => n.Index).ToList();
       var elements = newSource.Select(n => n.Element);
       var maxIndex = indexes.Max();
-      foreach (var count in Enumerable.Range(0,maxIndex))
+      foreach (var count in Enumerable.Range(0,maxIndex+1))
       {
         if (indexes.Contains(count))
         {
