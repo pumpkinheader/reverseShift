@@ -73,8 +73,34 @@ namespace reverseShift
         });
         Console.Write("END\n");
       });
+
+      //arrayに変換
+      var positionsArray = positions.Select(p => new {Name = p.Name, Datasets = listOfListToArray(p._positions)});
+      //Excel書き込み
+      using (var excelwriter = new ExcelOperator())
+      {
+        positionsArray.ForEach(d => 
+        {
+          excelwriter.fileName = d.Name + ".xlsx";
+          excelwriter.WriteFromArray(d.Datasets); 
+        });
+      }
       Console.ReadLine();
     }
 
+    public static Object[,] listOfListToArray<T>(List<List<T>> source)
+    {
+      int rowNum = source.Count();
+      int columNum = source[0].Count();
+      var datasets = new Object[rowNum, 25];
+      source.Indexed().ForEach(s =>
+      {
+        s.Element.Indexed().ForEach(p =>
+        {
+          datasets[s.Index, p.Index] = p.Element;
+        });
+      });
+      return datasets;
+    }
   }
 }

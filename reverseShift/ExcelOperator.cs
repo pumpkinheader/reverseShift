@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace reverseShift
 {
-  class ExcelOperator
+  class ExcelOperator: IDisposable
   {
     //Excelオブジェクトの初期化:非.NETリソースと思われる
     Excel.Application ExcelApp = null;
@@ -19,8 +19,8 @@ namespace reverseShift
     Excel.Range range = null;
 
     //通常オブジェクト
-    string directoryPath { get; set; }
-    string fileName { get; set; }
+    public string directoryPath { get; set; }
+    public string fileName { get; set; }
 
     //for writing
     public ExcelOperator()
@@ -38,7 +38,7 @@ namespace reverseShift
 
     public string GetDirPath()
     {
-      return directoryPath + fileName;
+      return directoryPath + "/" +fileName;
     }
     public void WriteFromArray(Object[,] datasets)
     {
