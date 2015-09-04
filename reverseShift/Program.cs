@@ -32,12 +32,6 @@ namespace reverseShift
         var tasks = row.ConvertAll(cell => cell.Value.ToString());
         members.Add(new People(tasks[0], tasks.Skip(1).ToList()));
       });
-      members.ForEach(member =>
-      {
-        Console.Write("Name:{0} Pos:",member.Name);
-        member.getPosList().ForEach(pos => Console.Write(" {0} ", pos));
-        Console.WriteLine("");
-      });
 
       //job生成
       members
@@ -45,47 +39,34 @@ namespace reverseShift
         .Distinct()
         .ForEach(name =>
         {
-          if(name!="")
+          if (name != "")
             positions.Add(new Position(name));
         });
-      positions.ForEach(p => Console.WriteLine(p.Name));
       positions.ForEach(p =>
       {
         members.ForEach(m =>
         {
           var list = new List<string>();
-          var listFromJob = 
+          var listFromJob =
             m.getPosList()
             .Indexed()
-            .Where(l => l.Element==p.Name)
+            .Where(l => l.Element == p.Name)
             .Select(s => new IndexedItem<string>(m.Name, s.Index));
-          Console.WriteLine(listFromJob.Count());
-          if(!listFromJob.IsEmpty())
+          if (!listFromJob.IsEmpty())
             p._positions.Add(list.Renew(listFromJob).ToList());
         });
       });
-      positions.ForEach(p =>
-      {
-        Console.WriteLine(p.Name);
-        p._positions.ForEach(ms =>
-        {
-          ms.ForEach(m=>Console.Write(m+":"));
-        });
-        Console.Write("END\n");
-      });
-
       //arrayに変換
-      var positionsArray = positions.Select(p => new {Name = p.Name, Datasets = listOfListToArray(p._positions)});
+      var positionsArray = positions.Select(p => new { Name = p.Name, Datasets = listOfListToArray(p._positions) });
       //Excel書き込み
-      positionsArray.ForEach(d => 
-        {
-      using (var excelwriter = new ExcelOperator())
+      positionsArray.ForEach(d =>
       {
+        using (var excelwriter = new ExcelOperator())
+        {
           excelwriter.fileName = d.Name + ".xlsx";
-          excelwriter.WriteFromArray(d.Datasets); 
-      }
-        });
-      Console.ReadLine();
+          excelwriter.WriteFromArray(d.Datasets);
+        }
+      });
     }
 
     public static Object[,] listOfListToArray<T>(List<List<T>> source)
