@@ -22,9 +22,13 @@ namespace reverseShift
       //var excel = new ExcelQueryFactory(fileName);
       //for Debug
       var excel = new ExcelQueryFactory(@"D:\\Documents\\Projects\\4_private\\rikoten\\reverseShift\\reverseShift\\test\\test_shift.xlsx");
-
       excel.ReadOnly = true;
-      var worksheet = excel.Worksheet("Sheet1");
+      string worksheetName = excel.GetWorksheetNames().ToList()[0];
+      var worksheet = excel.Worksheet(worksheetName);
+
+      //header設定
+      var columnNames = excel.GetColumnNames(worksheetName).ToList();
+      columnNames.RemoveAt(0);
 
       //member追加
       worksheet.ForEach(row =>
@@ -44,6 +48,7 @@ namespace reverseShift
         });
       positions.ForEach(p =>
       {
+        p._positions.Add(columnNames);
         members.ForEach(m =>
         {
           var list = new List<string>();

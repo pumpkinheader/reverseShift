@@ -50,7 +50,7 @@ namespace reverseShift
     }
 
 
-    //リソースの破棄 なんでvirtualを使うかはよく知らない
+    //リソースの破棄
     ~ExcelOperator()
     {
       Dispose(false);
