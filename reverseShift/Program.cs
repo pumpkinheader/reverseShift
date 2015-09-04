@@ -17,11 +17,9 @@ namespace reverseShift
       var members = new List<People>();
       var positions = new List<Position>();
 
-      //本番用
-      //string fileName = System.Environment.CurrentDirectory + "\\test\\test_shift.xlsx";
-      //var excel = new ExcelQueryFactory(fileName);
-      //for Debug
-      var excel = new ExcelQueryFactory(@"D:\\Documents\\Projects\\4_private\\rikoten\\reverseShift\\reverseShift\\test\\test_shift.xlsx");
+      //ファイル読み込み
+      string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "/" + args[0];
+      var excel = new ExcelQueryFactory(fileName);
       excel.ReadOnly = true;
       string worksheetName = excel.GetWorksheetNames().ToList()[0];
       var worksheet = excel.Worksheet(worksheetName);
