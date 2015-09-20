@@ -62,14 +62,13 @@ namespace reverseShift
       //arrayに変換
       var positionsArray = positions.Select(p => new { Name = p.Name, Datasets = listOfListToArray(p._positions) });
       //Excel書き込み
-      positionsArray.ForEach(d =>
+      using (var excelwriter = new ExcelOperator())
       {
-        using (var excelwriter = new ExcelOperator())
+        positionsArray.Indexed().ForEach(d =>
         {
-          excelwriter.fileName = d.Name + ".xlsx";
-          excelwriter.WriteFromArray(d.Datasets);
-        }
-      });
+          excelwriter.WriteFromArray(d.Element.Datasets,d.Index+1);
+        });
+      }
     }
 
     public static Object[,] listOfListToArray<T>(List<List<T>> source)
