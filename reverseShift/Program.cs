@@ -68,6 +68,7 @@ namespace reverseShift
         {
           excelwriter.WriteFromArray(d.Element.Datasets,d.Index+1,d.Element.Name);
         });
+        excelwriter.SaveBook();
       }
     }
 
