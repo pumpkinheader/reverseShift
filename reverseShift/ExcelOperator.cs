@@ -46,7 +46,21 @@ namespace reverseShift
       var secondDimension = datasets.GetLength(1);
       range = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[firstDimension, secondDimension]];
       range.Value2 = datasets;
+    }
+    public void WriteFromArray(Object[,] datasets, int sheetIndex ,string sheetName = "null")
+    {
+      if (sheets.Count < sheetIndex) sheets.Add();
+      worksheet = sheets[sheetIndex];
+      if ("null" != worksheet.Name) SetSheetName(sheetName); 
+      WriteFromArray(datasets);
+    }
+    public void SaveBook()
+    {
       workbook.SaveAs(GetDirPath());
+    }
+    public void SetSheetName(string name)
+    {
+      worksheet.Name = name;
     }
 
 
