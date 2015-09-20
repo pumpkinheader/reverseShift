@@ -66,7 +66,7 @@ namespace reverseShift
       {
         positionsArray.Indexed().ForEach(d =>
         {
-          excelwriter.WriteFromArray(d.Element.Datasets,d.Index+1);
+          excelwriter.WriteFromArray(d.Element.Datasets,d.Index+1,d.Element.Name);
         });
       }
     }
