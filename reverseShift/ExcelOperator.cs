@@ -49,7 +49,7 @@ namespace reverseShift
     }
     public void WriteFromArray(Object[,] datasets, int sheetIndex ,string sheetName = "null")
     {
-      if (sheets.Count < sheetIndex) sheets.Add();
+      if (sheets.Count < sheetIndex) sheets.Add(After: sheets[sheetIndex-1]);
       worksheet = sheets[sheetIndex];
       if ("null" != sheetName) SetSheetName(sheetName); 
       WriteFromArray(datasets);

@@ -18,6 +18,10 @@ namespace reverseShift
       var positions = new List<Position>();
 
       //ファイル読み込み
+      if (args.IsEmpty())
+      {
+        args = new string[]{"test_shift.xlsx"};
+      }
       string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "/" + args[0];
       var excel = new ExcelQueryFactory(fileName);
       excel.ReadOnly = true;
