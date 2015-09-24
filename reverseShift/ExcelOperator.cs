@@ -51,7 +51,7 @@ namespace reverseShift
     {
       if (sheets.Count < sheetIndex) sheets.Add();
       worksheet = sheets[sheetIndex];
-      if ("null" != worksheet.Name) SetSheetName(sheetName); 
+      if ("null" != sheetName) SetSheetName(sheetName); 
       WriteFromArray(datasets);
     }
     public void SaveBook()
