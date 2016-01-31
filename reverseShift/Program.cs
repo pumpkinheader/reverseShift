@@ -10,7 +10,7 @@ namespace reverseShift
   {
     static void Main(string[] args)
     {
-      var members = new List<People>();
+      var members = new List<Member>();
       var positions = new List<Position>();
 
       //ファイル読み込み
@@ -25,42 +25,51 @@ namespace reverseShift
       var worksheet = excel.Worksheet(worksheetName);
 
       //header設定
-      var columnNames = excel.GetColumnNames(worksheetName).ToList();
-      columnNames.RemoveAt(0);
+      var header = excel.GetColumnNames(worksheetName).ToList();
+      //時刻情報のみ取り出す
+      header.RemoveAt(0);
 
-      //member追加
+      //member生成
       worksheet.ForEach(row =>
       {
-        var tasks = row.ConvertAll(cell => cell.Value.ToString());
-        members.Add(new People(tasks[0], tasks.Skip(1).ToList()));
+        var cells = row.ConvertAll(cell => cell.Value.ToString());
+        members.Add(new Member(cells[0], cells.Skip(1).ToList()));
       });
 
-      //job生成
+      //position生成
       members
-        .SelectMany(p => p.getPosList())
+        .SelectMany(m => m.PositionNames)
         .Distinct()
         .ForEach(name =>
         {
+          //空欄でなければ追加
           if (name != "")
             positions.Add(new Position(name));
         });
+      
+      //Shift生成
       positions.ForEach(p =>
       {
-        p._positions.Add(columnNames);
+        p.Shifts.Add(header);
         members.ForEach(m =>
         {
-          var list = new List<string>();
+          //(名前, シフトは何時か)を出力
           var listFromJob =
-            m.getPosList()
+            m.PositionNames
             .Indexed()
             .Where(l => l.Element == p.Name)
             .Select(s => new IndexedItem<string>(m.Name, s.Index));
+
+          //該当シフトがあればフォーマットして追加
+          //フォーマット: (A, 1) のとき list[1] = "A"
           if (!listFromJob.IsEmpty())
-            p._positions.Add(list.Renew(listFromJob).ToList());
+            p.Shifts.Add(new List<string>().FillIndex(listFromJob).ToList());
         });
       });
-      //arrayに変換
-      var positionsArray = positions.Select(p => new { Name = p.Name, Datasets = listOfListToArray(p._positions) });
+
+      //Excelに書き込めるよう、arrayに変換
+      var positionsArray = positions.Select(p => new { Name = p.Name, Datasets = ListOfListToArray(p.Shifts) });
+      
       //Excel書き込み
       using (var excelwriter = new ExcelOperator())
       {
@@ -72,7 +81,7 @@ namespace reverseShift
       }
     }
 
-    public static Object[,] listOfListToArray<T>(List<List<T>> source)
+    public static Object[,] ListOfListToArray<T>(List<List<T>> source)
     {
       int rowNum = source.Count();
       int columNum = source[0].Count();

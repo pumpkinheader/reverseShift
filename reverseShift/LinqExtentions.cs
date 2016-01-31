@@ -32,7 +32,7 @@ namespace Extentions
     {
       return source.Count() == 0;
     }
-    public static IEnumerable<T> Renew<T>(this IEnumerable<T> oldSource, IEnumerable<IndexedItem<T>> newSource)
+    public static IEnumerable<T> FillIndex<T>(this IEnumerable<T> oldSource, IEnumerable<IndexedItem<T>> newSource)
     {
       var indexes = newSource.Select(n => n.Index).ToList();
       var elements = newSource.Select(n => n.Element);
